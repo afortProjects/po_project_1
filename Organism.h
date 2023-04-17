@@ -1,12 +1,12 @@
-#pragma once	
-#include "World.h"
+#pragma once
 class Organism {
 protected:
-	World& world;
+	//World& world;
 	int posX, posY, age, strength, initiative;
 public:
+	Organism();
 	void virtual act() = 0;
 	void virtual collision() = 0;
 	void virtual draw() = 0;
-	virtual ~Organism() = 0;
+	~Organism();
 };

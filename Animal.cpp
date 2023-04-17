@@ -1,5 +1,8 @@
 #include "Animal.h"
 
+Animal::Animal() {
+	//Constructor
+}
 void Animal::act() {
 	//Move randomly by one field
 }
@@ -10,6 +13,7 @@ void Animal::draw() {
 	//Draw animal
 }
 bool Animal::didReflectAttack() {
+	return true;
 	//Check for attack reflection (turtle)
 }
 Animal::~Animal() {

@@ -1,7 +1,9 @@
 #pragma once
 #include "Organism.h"
 
-class Animal : Organism {
+class Animal : public Organism {
+public:
+	Animal();
 	void act() override;
 	void collision() override;
 	void draw() override;

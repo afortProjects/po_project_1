@@ -1,5 +1,8 @@
 #include "Plant.h"
 
+Plant::Plant() {
+
+}
 void Plant::act() {
 	//Chance for breeding
 }
