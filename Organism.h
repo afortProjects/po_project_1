@@ -8,5 +8,7 @@ public:
 	void virtual act() = 0;
 	void virtual collision() = 0;
 	void virtual draw() = 0;
+	int getPosX();
+	int getPosY();
 	~Organism();
 };

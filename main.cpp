@@ -12,5 +12,6 @@ int main() {
 	cin >> a >> b;
 	World world{ a,b };
 	world.makeATurn();
+	world.drawBoard();
 	return 0;
 }
