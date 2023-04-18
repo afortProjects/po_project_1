@@ -1,8 +1,10 @@
 #pragma once
+class World;
+
 class Organism {
 protected:
-	//World& world;
-	int posX, posY, age, strength, initiative;
+	World* world = nullptr;
+	int posX=0, posY=0, age=0, strength=0, initiative=0;
 public:
 	Organism();
 	void virtual act() = 0;

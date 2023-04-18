@@ -7,11 +7,15 @@
 using namespace std;
 
 int main() {
+	
 	int a, b;
-	cout << "Give a, b: ";
+	printf("Give a, b: ");
 	cin >> a >> b;
 	World world{ a,b };
-	world.makeATurn();
 	world.drawBoard();
+
+	while (world.isRunning) {
+		world.makeATurn();
+	}
 	return 0;
 }
