@@ -7,3 +7,9 @@ void clearscreen(void)
 {
 	system("cls");
 }
+void hideCursor() {
+	printf("\33[?25l");
+}
+void showCursor() {
+	printf("\33[?25h");
+}

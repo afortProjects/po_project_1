@@ -9,8 +9,10 @@ using namespace std;
 int main() {
 	
 	int a, b;
+	//system("mode 650");
 	printf("Give a, b: ");
 	cin >> a >> b;
+	clearscreen();
 	World world{ a,b };
 	world.drawBoard();
 

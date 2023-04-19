@@ -10,3 +10,8 @@ int Organism::getPosX() {
 int Organism::getPosY() {
 	return this->posY;
 }
+
+bool Organism::operator >(const Organism* object)
+{
+	return (this->initiative> object->initiative);
+}

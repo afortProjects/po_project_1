@@ -46,9 +46,7 @@ void World::makeATurn() {
 	//Now we have to sort bordWithOrganismsOnly by their initiatives
 	std::sort(boardWithOrganismsOnly.begin(), boardWithOrganismsOnly.end());
 
-	for (size_t i = 0; i < boardWithOrganismsOnly.size(); i++) {
-		boardWithOrganismsOnly[i]->act();
-	}
+
 
 	for (size_t i = 0; i < a * b; i++) {
 		for (size_t j = 0; j < a * b; j++) {
