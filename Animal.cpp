@@ -6,10 +6,16 @@ Animal::Animal() {};
 Animal::Animal(World* world) {
 	//Constructor
 	this->world = world;
-	this->posX = int(rand() % this->world->a + 1);
-	this->posY = int(rand() % this->world->b + 1);
-	this->positionInBoard = this->posX * this->world->a + this->posY; // TODO: CHECK
-	this->world->board[this->positionInBoard] = this;
+	this->posX = floor(rand() % this->world->a + 1);
+	this->posY = floor(rand() % this->world->b + 1);
+
+	//Check if place is not occupied
+	while (this->world->board[this->posX][this->posY] != nullptr) {
+		this->posX = floor(rand() % this->world->a + 1);
+		this->posY = floor(rand() % this->world->b + 1);
+	}
+
+	this->world->board[this->posX][this->posY] = this;
 }
 void Animal::act() {
 	//Move randomly by one field TODO FIX, we are moving on board
@@ -38,12 +44,6 @@ void Animal::act() {
 		}
 	}
 	if (tempX >= 0 && tempX < this->world->a && tempY >= 0 && tempY < this->world->b) {
-		this->world->board[this->positionInBoard] = nullptr;
-		tempPosition = tempX * this->world->a + tempY; // TODO: FIX 
-
-		this->world->board[tempPosition] = this;
-
-		this->positionInBoard = tempPosition;
 		this->posX = tempX;
 		this->posY = tempY;
 	}

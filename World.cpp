@@ -7,10 +7,12 @@
 World::World(int a, int b) {
 	this->a = a;
 	this->b = b;
-	//1d array of size a * b of pointers that wil be used as 2d array
-	for (size_t i = 0; i < a * b; i++) {
-		this->board.push_back(nullptr);
+	for (size_t i = 0; i < a; i++) {
+		for (size_t j = 0; j < b; j++) {
+			this->board[i].push_back(nullptr);
+		}
 	}
+
 	Animal* animal = new Animal(this);
 	Animal* animal2 = new Animal(this);
 	Animal* animal3 = new Animal(this);
@@ -30,16 +32,20 @@ void World::makeATurn() {
 	//Invoke collision on all objects that are in the same field
 	this->human->act();
 	std::vector<Organism*> boardWithOrganismsOnly;
-	for (size_t i = 0; i < a * b; i++) {
-		//Consider initiative and age
-		//if (dynamic_cast<Organism*>(this->board[i]) == nullptr)
-		if (board[i] == nullptr) {
-			//Organism object here
+	for (size_t i = 0; i < a; i++) {
+		for (size_t j = 0; j < b; j++) {
+			if (board[i][j]!= nullptr) {
+				boardWithOrganismsOnly.push_back(this->board[i][j]);
+			}
 		}
-		else {
-			//Consider initiative
-			boardWithOrganismsOnly.push_back(this->board[i]);
-		}
+		////Consider initiative and age
+		////if (dynamic_cast<Organism*>(this->board[i]) == nullptr)
+		//if (board[i] == nullptr) {
+		//	//Organism object here
+		//}
+		//else {
+		//	//Consider initiative
+		//}
 	}
 
 	//Now we have to sort bordWithOrganismsOnly by their initiatives
@@ -49,12 +55,17 @@ void World::makeATurn() {
 		boardWithOrganismsOnly[i]->act();
 	}
 
-	for (size_t i = 0; i < a * b; i++) {
-		for (size_t j = 0; j < a * b; j++) {
-			//Consider initiative and age
-			if (board[i] != nullptr && board[j] != nullptr) {
-				if (board[i]->getPosX() == board[j]->getPosX() && board[i]->getPosY() == board[j]->getPosY() && i != j)
-					board[i]->collision();
+	for (size_t i = 0; i < a; i++) {
+		for (size_t j = 0; j < b; j++) {
+			for (size_t k = 0; k < a; k++) {
+				for (size_t l = 0; l < b; l++) {
+					if (board[i][j] && board[k][l] != nullptr) {
+						if (board[i][j]->getPosX() == board[k][l]->getPosX() && board[i][j]->getPosY() == board[k][l]->getPosY() && i != k && j != l) {
+							//Make collision take organism object as parametr
+							board[i][j]->collision();
+						}
+					}
+				} 
 			}
 		}
 	}
@@ -76,8 +87,8 @@ void World::drawBoard() {
 		for (size_t j = 0; j < this->a * (SCALE_X + 1); j++) {
 			if (i % 2 == 0) {
 				if (j % (SCALE_X + 1) == 0) {
-					int k = (i / SCALE_Y) * (this->a) + (j / (SCALE_X + 1)); // 4 * 3 = 12 + 2 = 14
-					if (this->board[k] != nullptr) {
+					//int k = (i / SCALE_Y) * (this->a) + (j / (SCALE_X + 1)); // 4 * 3 = 12 + 2 = 14
+					if (this->board[i][j] != nullptr) {
 						printf("A");
 					}
 					else {

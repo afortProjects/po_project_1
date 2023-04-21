@@ -10,7 +10,7 @@
 class World {
 public:
 	int a, b;
-	std::vector<Organism*> board;
+	std::vector<std::vector<Organism*>> board;
 	bool isRunning = true;
 	Human* human;
 
