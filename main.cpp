@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-	
+	//srand(time(0));
 	int a, b;
 	//system("mode 650");
 	printf("Give a, b: ");

@@ -7,16 +7,15 @@
 World::World(int a, int b) {
 	this->a = a;
 	this->b = b;
-	Animal* animal = new Animal();
 	//1d array of size a * b of pointers that wil be used as 2d array
 	for (size_t i = 0; i < a * b; i++) {
-		if (i % 10 == 0) {
-			this->board.push_back(animal);
-		}
-		else {
-			this->board.push_back(nullptr);
-		}
+		this->board.push_back(nullptr);
 	}
+	Animal* animal = new Animal(this);
+	Animal* animal2 = new Animal(this);
+	Animal* animal3 = new Animal(this);
+	Animal* animal4 = new Animal(this);
+
 
 	this->human = new Human(this);
 
@@ -77,7 +76,13 @@ void World::drawBoard() {
 		for (size_t j = 0; j < this->a * (SCALE_X + 1); j++) {
 			if (i % 2 == 0) {
 				if (j % (SCALE_X + 1) == 0) {
-					printf(" ");
+					int k = (i / SCALE_Y) * (this->a) + (j / (SCALE_X + 1)); // 4 * 3 = 12 + 2 = 14
+					if (this->board[k] != nullptr) {
+						printf("A");
+					}
+					else {
+						printf(" ");
+					}
 					spacesCounter++;
 				}
 				else if (spacesCounter != this->a) {

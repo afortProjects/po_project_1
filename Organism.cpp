@@ -1,6 +1,10 @@
 #include "Organism.h"
 
-Organism::Organism() {}
+Organism::Organism() {};
+
+Organism::Organism(World* world) {
+	this->world = world;
+}
 Organism::~Organism() {}
 
 int Organism::getPosX() {
@@ -13,5 +17,5 @@ int Organism::getPosY() {
 
 bool Organism::operator >(const Organism* object)
 {
-	return (this->initiative> object->initiative);
+	return (this->initiative > object->initiative);
 }
