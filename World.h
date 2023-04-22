@@ -15,7 +15,7 @@ public:
 	Human* human;
 
 	World(int a, int b);
-	bool compareTwoOrganisms(Organism* a, Organism* b);
+	void fight(Organism* firstOrganism, Organism* secondOrganism);
 	void makeATurn();
 	void drawBoard();
 	~World();

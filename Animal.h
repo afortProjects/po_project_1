@@ -3,8 +3,10 @@
 
 class Animal : public Organism {
 public:
-	Animal();
-	Animal(World* world);
+	bool isAnimal = true;
+	World& world;
+	Animal(World& world);
+	Animal(World& world, bool isHuman);
 	void act() override;
 	void collision() override;
 	void draw() override;

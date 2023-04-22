@@ -1,21 +1,24 @@
 #include "Animal.h"
 #include "World.h"
 #include <iostream>
-Animal::Animal() {};
+#include "Human.h"
+//Animal::Animal() {};
 
-Animal::Animal(World* world) {
+Animal::Animal(World& world, bool isHuman) : world{ world }, Organism(world) {}
+
+Animal::Animal(World& world) : world{ world }, Organism(world) {
 	//Constructor
-	this->world = world;
-	this->posX = floor(rand() % this->world->a + 1);
-	this->posY = floor(rand() % this->world->b + 1);
+
+	this->posX = floor(rand() % this->world.a);
+	this->posY = floor(rand() % this->world.b);
 
 	//Check if place is not occupied
-	while (this->world->board[this->posX][this->posY] != nullptr) {
-		this->posX = floor(rand() % this->world->a + 1);
-		this->posY = floor(rand() % this->world->b + 1);
+	while (this->world.board[this->posX][this->posY] != nullptr) {
+		this->posX = floor(rand() % this->world.a);
+		this->posY = floor(rand() % this->world.b);
 	}
 
-	this->world->board[this->posX][this->posY] = this;
+	this->world.board[this->posX][this->posY] = this;
 }
 void Animal::act() {
 	//Move randomly by one field TODO FIX, we are moving on board
@@ -24,9 +27,9 @@ void Animal::act() {
 	int tempY = this->posY;
 	int tempPosition; // TODO: CHECK
 
-	if ((round((double)rand() / (RAND_MAX)))) {
+	if (rand()%2) {
 		//Move by X
-		if (((double)rand() / (RAND_MAX))) {
+		if (rand()%2) {
 			tempX++;
 		}
 		else {
@@ -36,14 +39,14 @@ void Animal::act() {
 	}
 	else {
 		//Move by Y
-		if ((round((double)rand() / (RAND_MAX)))) {
+		if (rand() % 2) {
 			tempY++;
 		}
 		else {
 			tempY--;
 		}
 	}
-	if (tempX >= 0 && tempX < this->world->a && tempY >= 0 && tempY < this->world->b) {
+	if (tempX >= 0 && tempX < this->world.a && tempY >= 0 && tempY < this->world.b) {
 		this->posX = tempX;
 		this->posY = tempY;
 	}
@@ -54,6 +57,7 @@ void Animal::collision() {
 }
 void Animal::draw() {
 	//Draw animal
+	printf("A");
 }
 bool Animal::didReflectAttack() {
 	return true;

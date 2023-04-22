@@ -1,6 +1,6 @@
 #include "Plant.h"
 
-Plant::Plant() {
+Plant::Plant(World& world) : world(world), Organism(world) {
 
 }
 void Plant::act() {
