@@ -28,8 +28,6 @@ World::World(int a, int b) {
 
 void World::fight(Organism* firstOrganism, Organism* secondOrganism) {
 	//Handle if 2 objects are in the same place
-	//If objects are of the same class -> breeding
-	//Else there is a fight
 	
 }
 

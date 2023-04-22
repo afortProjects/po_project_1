@@ -10,7 +10,7 @@ protected:
 public:
 	int initiative = 0, age = 0;
 	Organism(World& world);
-
+	Organism(World& world, bool isHuman);
 	void virtual act() = 0;
 	void virtual collision() = 0;
 	void virtual draw() = 0;

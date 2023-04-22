@@ -2,15 +2,15 @@
 #include "World.h"
 #include <iostream>
 #include "Human.h"
-
-Animal::Animal(World& world) : world{ world }, Organism(world) {
-
-}
+//Animal::Animal() {};
 
 Animal::Animal(World& world, bool isHuman) : world{ world }, Organism(world, isHuman) {
 
 }
 
+Animal::Animal(World& world) : world{ world }, Organism(world) {
+
+}
 void Animal::act() {
 	//Move randomly by one field TODO FIX, we are moving on board
 	//TODO: Check if positions are in in board
