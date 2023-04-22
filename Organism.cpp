@@ -1,7 +1,9 @@
 #include "Organism.h"
+#include <iostream>
 
-Organism::Organism(World& world) : world(world){}
-Organism::~Organism() {}
+Organism::Organism(World& world) : world(world) {
+	//this->initiative = (1+ (rand() % 10));
+}
 
 int Organism::getPosX() {
 	return this->posX;
@@ -10,9 +12,7 @@ int Organism::getPosX() {
 int Organism::getPosY() {
 	return this->posY;
 }
-//Consider initiative and age
-bool Organism::operator >(const Organism* object)
-{
-	if (this->initiative == object->initiative) return (this->age > object->age);
-	return (this->initiative > object->initiative);
+
+Organism::~Organism() {
+
 }

@@ -16,9 +16,9 @@ World::World(int a, int b) {
 	}
 
 	Animal* animal = new Animal(*this);
-	//Animal* animal2 = new Animal(*this);
-	//Animal* animal3 = new Animal(this);
-	//Animal* animal4 = new Animal(this);
+	Animal* animal2 = new Animal(*this);
+	Animal* animal3 = new Animal(*this);
+	Animal* animal4 = new Animal(*this);
 
 
 	this->human = new Human(*this);
@@ -26,8 +26,8 @@ World::World(int a, int b) {
 }
 
 void World::fight(Organism* firstOrganism, Organism* secondOrganism) {
-	//fight
 	//Handle if 2 objects are in the same place
+	
 }
 
 
@@ -47,9 +47,13 @@ void World::makeATurn() {
 	}
 
 	//Now we have to sort bordWithOrganismsOnly by their initiatives and age
-	std::sort(boardWithOrganismsOnly.begin(), boardWithOrganismsOnly.end());
+	std::sort(boardWithOrganismsOnly.begin(), boardWithOrganismsOnly.end(), [](
+		const Organism* left, const Organism* right) {
+			if (left->initiative == right->initiative) return (left->age < right->age);
+			return (left->initiative < right->initiative);
+		});
 
-	for (size_t i = 0; i < boardWithOrganismsOnly.size(); i++) {
+	for (size_t i = boardWithOrganismsOnly.size()-1; i > 0; i--) {
 		boardWithOrganismsOnly[i]->act();
 		boardWithOrganismsOnly[i]->age++;
 	}
@@ -79,6 +83,8 @@ void World::makeATurn() {
 
 		}
 	}
+
+	this->human->collision();
 
 	drawBoard();
 }
