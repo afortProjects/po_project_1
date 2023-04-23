@@ -20,7 +20,8 @@ void Animal::act() {
 	int tempX = this->posX;
 	int tempY = this->posY;
 	int tempPosition; // TODO: CHECK
-
+	this->beforeMoveX = tempX;
+	this->beforeMoveY = tempY;
 	if (rand()%2) {
 		//Move by X
 		if (rand()%2) {
@@ -44,47 +45,46 @@ void Animal::act() {
 		this->posX = tempX;
 		this->posY = tempY;
 	}
-	this->beforeMoveX = tempX;
-	this->beforeMoveY = tempY;
 
-	if (this->world.board[this->posX][this->posY] != nullptr) collision();
+
+	if (this->world.board[this->posX][this->posY] != nullptr && this->posX != this->beforeMoveX && this->posY != this->beforeMoveY) collision();
 }
 void Animal::collision() {
 	//Check if there is the same species nearby, if yes create new object
 	if (typeid(this) == typeid(this->world.board[this->posX][this->posY])) {
 		Animal* newAnimal = this->clone();
-
+		//todo: check if tempx tempy are in range 
 		//Find place for new animal
 		this->world.board[newAnimal->posX][newAnimal->posY] = nullptr;
-		if (this->world.board[this->posX + 1][this->posY] == nullptr) {
+		if (this->world.board[this->posX + 1][this->posY] == nullptr && this->posX + 1 < this->world.a) {
 			newAnimal->posX = this->posX + 1;
 			newAnimal->posY = this->posY;
 		}
-		else if (this->world.board[this->posX - 1][this->posY] == nullptr) {
+		else if (this->world.board[this->posX - 1][this->posY] == nullptr && this->posX > 0) {
 			newAnimal->posX = this->posX - 1;
 			newAnimal->posY = this->posY;
 		}
-		else if (this->world.board[this->posX][this->posY + 1] == nullptr) {
+		else if (this->world.board[this->posX][this->posY + 1] == nullptr && this->posY + 1 < this->world.b) {
 			newAnimal->posX = this->posX;
 			newAnimal->posY = this->posY+1;
 		}
-		else if (this->world.board[this->posX][this->posY-1] == nullptr) {
+		else if (this->world.board[this->posX][this->posY-1] == nullptr && this->posY > 0) {
 			newAnimal->posX = this->posX;
 			newAnimal->posY = this->posY-1;
 		}
-		else if (this->world.board[this->beforeMoveX + 1][this->beforeMoveY] == nullptr) {
+		else if (this->world.board[this->beforeMoveX + 1][this->beforeMoveY] == nullptr && this->beforeMoveX+1 < this->world.a) {
 			newAnimal->posX = this->beforeMoveX + 1;
 			newAnimal->posY = this->beforeMoveY;
 		}
-		else if (this->world.board[this->beforeMoveX - 1][this->beforeMoveY] == nullptr) {
+		else if (this->world.board[this->beforeMoveX - 1][this->beforeMoveY] == nullptr && this->beforeMoveX > 0) {
 			newAnimal->posX = this->beforeMoveX-1;
 			newAnimal->posY = this->beforeMoveY;
 		}
-		else if (this->world.board[this->beforeMoveX][this->beforeMoveY+1] == nullptr) {
+		else if (this->world.board[this->beforeMoveX][this->beforeMoveY+1] == nullptr && this->beforeMoveY+ 1 < this->world.b) {
 			newAnimal->posX = this->beforeMoveX;
 			newAnimal->posY = this->beforeMoveY+1;
 		}
-		else if (this->world.board[this->beforeMoveX][this->beforeMoveY-1] == nullptr) {
+		else if (this->world.board[this->beforeMoveX][this->beforeMoveY-1] == nullptr && this->beforeMoveY > 0) {
 			newAnimal->posX = this->beforeMoveX;
 			newAnimal->posY = this->beforeMoveY-1;
 		}
@@ -93,7 +93,7 @@ void Animal::collision() {
 		this->posY = this->beforeMoveY;
 		this->world.board[newAnimal->posX][newAnimal->posY] = newAnimal;
 	}
-	else if (this->world.board[this->posX][this->posY]->didReflectAttack(this->strength)) {
+	else if (!(this->world.board[this->posX][this->posY]->didReflectAttack(this->strength))) {
 		//We have a fight
 		Organism* opponent = this->world.board[this->posX][this->posY];
 		this->strength += opponent->addStrength();
@@ -105,6 +105,7 @@ void Animal::collision() {
 		else if (this->strength < opponent->strength) {
 			this->world.board[this->beforeMoveX][this->beforeMoveY] = nullptr;
 			delete this;
+			if (dynamic_cast<Human*>(this) != nullptr) this->world.isRunning = false;
 		}
 	}
 	else {

@@ -3,6 +3,7 @@
 #include "Wolf.h"
 #include "Sheep.h"
 #include "output.h"
+#include "Human.h"
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -20,11 +21,11 @@ World::World(int a, int b) {
 
 	//Animal* animal = new Animal(*this);
 	//Animal* animal2 = new Animal(*this);
+	this->human = new Human(*this);
 	Animal* animal3 = new Sheep(*this);
 	Animal* animal4 = new Wolf(*this);
 	//Plant* plant = new Plant(*this);
 
-	this->human = new Human(*this);
 
 }
 //
@@ -41,7 +42,7 @@ World::World(int a, int b) {
 void World::makeATurn() {
 	//Invoke act on all objects considering their initiative and age
 	//Invoke collision on all objects that are in the same field
-
+	if (this->human == nullptr) this->isRunning = false;
 	std::vector<Organism*> boardWithOrganismsOnly;
 	
 	for (size_t i = 0; i < a; i++) {
@@ -110,7 +111,7 @@ void World::drawBoard()
 			if (i % 2 == 0) {
 				if (j % (SCALE_X + 1) == 0) {
 					//int k = (i / SCALE_Y) * (this->a) + (j / (SCALE_X + 1)); // 4 * 3 = 12 + 2 = 14
-					if (this->board[j / (SCALE_X + 1)][i / SCALE_Y] != nullptr) {
+					if (this->board[j / (SCALE_X + 1)][i / SCALE_Y] != nullptr && dynamic_cast<Human*>(this->board[j / (SCALE_X + 1)][i / SCALE_Y]) == nullptr) {
 						this->board[j / (SCALE_X + 1)][i / SCALE_Y]->draw();
 					}
 					else {
@@ -135,10 +136,11 @@ void World::drawBoard()
 		if (i % 2 == 1) dashCounter++;
 		printf("\n");
 	}
-	showCursor();
+	//showCursor();
 	gotoxy(0, 40);
-	printf("Current x, y: %d, %d", this->human->posX / (SCALE_X+1), this->human->posY / SCALE_Y);
-	gotoxy(this->human->posX, this->human->posY);
+	printf("Current x, y: %d, %d", this->human->posX, this->human->posY);
+	gotoxy(this->human->posX * (SCALE_X+1)+1, this->human->posY * SCALE_Y+1);
+	this->human->draw();
 
 }
 

@@ -4,7 +4,7 @@
 
 class Human : public Animal {
 public:
-	int posX=1, posY = 1, initiative = 4, strength = 5;
+	int posX=0, posY = 0, initiative = 4, strength = 5;
 	bool isAnimal = false;
 	World& world;
 	Human(World& world);

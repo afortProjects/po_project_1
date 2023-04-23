@@ -10,30 +10,34 @@
 
 Human::Human(World& world) : world(world), Animal(world, true) {
 	world.board[0][0] = this;
+	this->posX = 0;
+	this->posY = 0;
 }
 
 void Human::draw() {
-	printf(" ");
+	printf("H");
 }
 
 void Human::act() {
 	//Handle user input
 	int newInput, newInput2;
+	this->beforeMoveX = this->posX;
+	this->beforeMoveY = this->posY;
 	newInput = _getch();
 	if (newInput == 0 || newInput == 224) {
 		newInput2 = _getch();
 		switch (newInput2) {
 		case KEY_UP:
-			this->posY -= SCALE_Y;
+			this->posY--;
 			break;
 		case KEY_DOWN:
-			this->posY += SCALE_Y;
+			this->posY++;
 			break;
 		case KEY_LEFT:
-			this->posX -= SCALE_X + 1;
+			this->posX--;
 			break;
 		case KEY_RIGHT:
-			this->posX += SCALE_X + 1;
+			this->posX++;
 			break;
 		}
 	}
@@ -41,16 +45,21 @@ void Human::act() {
 
 	//Check if in board
 
-	if (this->posX < 1)	this->posX = 1;
-	if (this->posY < 1) this->posY = 1;
+	if (this->posX < 0)	this->posX = 0;
+	if (this->posY < 0) this->posY = 0;
 
-	if (this->posX > this->world.a * (SCALE_X+1)) this->posX -= SCALE_X+1;
-	if (this->posY > this->world.b * SCALE_Y) this->posY = this->world.b*SCALE_Y-1;
+	if (this->posX > this->world.a - 1) this->posX--;
+	if (this->posY > this->world.b - 1) this->posY--;
+
+	if (this->world.board[this->posX][this->posY] != nullptr && this->posX != this->beforeMoveX && this->posY != this->beforeMoveY) collision();
+
 }
 
 void Human::collision() {
 	//Handle special ability and check for collision with other objects
+
+	Animal::collision();
 }
 Human::~Human() {
-
+	exit(0);
 }
