@@ -9,6 +9,7 @@ public:
 	World& world;
 	Human(World& world);
 	void act();
+	void draw();
 	void collision();
 	~Human();
 };

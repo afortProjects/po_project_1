@@ -22,7 +22,7 @@ World::World(int a, int b) {
 	//Animal* animal2 = new Animal(*this);
 	Animal* animal3 = new Sheep(*this);
 	Animal* animal4 = new Wolf(*this);
-	Plant* plant = new Plant(*this);
+	//Plant* plant = new Plant(*this);
 
 	this->human = new Human(*this);
 
@@ -92,7 +92,7 @@ void World::makeATurn() {
 		}
 	}
 
-	this->human->collision();
+	//this->human->collision();
 
 	drawBoard();
 }

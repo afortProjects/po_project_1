@@ -96,6 +96,7 @@ void Animal::collision() {
 	else if (this->world.board[this->posX][this->posY]->didReflectAttack(this->strength)) {
 		//We have a fight
 		Organism* opponent = this->world.board[this->posX][this->posY];
+		this->strength += opponent->addStrength();
 		if (this->strength >= opponent->strength) {
 			delete opponent;
 			this->world.board[this->beforeMoveX][this->beforeMoveY] = nullptr;

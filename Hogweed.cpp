@@ -3,6 +3,8 @@
 #include "Animal.h"
 Hogweed::Hogweed(World& world) : Plant(world) {
 	this->strength = 10;
+	this->initiative = 0;
+
 }
 
 void Hogweed::draw() {

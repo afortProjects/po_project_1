@@ -8,5 +8,5 @@ Grass::Grass(World& world) : Plant(world) {
 }
 
 void Grass::draw() {
-	printf("g");
+	printf("t");
 }

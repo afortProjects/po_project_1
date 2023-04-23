@@ -21,6 +21,10 @@ Organism::Organism(World& world, bool isHuman) : world(world) {
 	//this->initiative = (1+ (rand() % 10));
 }
 
+int Organism::addStrength() {
+	return 0;
+}
+
 Organism* clone() {
 	return nullptr;
 }

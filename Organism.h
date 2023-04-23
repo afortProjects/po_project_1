@@ -13,6 +13,7 @@ public:
 	Organism(World& world, bool isHuman);
 	Organism* clone();
 	bool virtual didReflectAttack(int opponentStrength) = 0;
+	int addStrength();
 	void virtual act() = 0;
 	void virtual collision() = 0;
 	void virtual draw() = 0;

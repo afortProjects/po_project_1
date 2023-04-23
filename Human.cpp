@@ -12,6 +12,10 @@ Human::Human(World& world) : world(world), Animal(world, true) {
 	world.board[0][0] = this;
 }
 
+void Human::draw() {
+	printf(" ");
+}
+
 void Human::act() {
 	//Handle user input
 	int newInput, newInput2;
