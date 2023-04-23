@@ -9,7 +9,7 @@
 #define KEY_RIGHT 77
 
 Human::Human(World& world) : world(world), Animal(world, true) {
-
+	world.board[0][0] = this;
 }
 
 void Human::act() {

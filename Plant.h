@@ -8,6 +8,7 @@ protected:
 public:
 	Plant(World& world);
 	void act() override;
+	Plant* clone();
 	void collision() override;
 	void draw() override;
 	~Plant();

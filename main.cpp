@@ -17,7 +17,7 @@ int main() {
 	world.drawBoard();
 
 	while (world.isRunning) {
-		world.human->act();
+		//world.human->act();
 		world.makeATurn();
 	}
 	return 0;

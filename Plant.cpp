@@ -3,6 +3,9 @@
 Plant::Plant(World& world) : world(world), Organism(world) {
 
 }
+Plant* Plant::clone() {
+	return new Plant(this->world);
+}
 void Plant::act() {
 	//Chance for breeding
 	if (rand() % 2 && rand() % 2) {

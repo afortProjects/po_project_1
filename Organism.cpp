@@ -21,6 +21,9 @@ Organism::Organism(World& world, bool isHuman) : world(world) {
 	//this->initiative = (1+ (rand() % 10));
 }
 
+Organism* clone() {
+
+}
 
 int Organism::getPosX() {
 	return this->posX;

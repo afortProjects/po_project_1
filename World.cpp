@@ -1,5 +1,7 @@
 #include "World.h"
 #include "Plant.h"
+#include "Wolf.h"
+#include "Sheep.h"
 #include "output.h"
 #include <vector>
 #include <iostream>
@@ -16,23 +18,25 @@ World::World(int a, int b) {
 		this->board.push_back(temp);
 	}
 
-	Animal* animal = new Animal(*this);
-	Animal* animal2 = new Animal(*this);
-	Animal* animal3 = new Animal(*this);
-	Animal* animal4 = new Animal(*this);
+	//Animal* animal = new Animal(*this);
+	//Animal* animal2 = new Animal(*this);
+	Animal* animal3 = new Sheep(*this);
+	Animal* animal4 = new Wolf(*this);
 	Plant* plant = new Plant(*this);
 
 	this->human = new Human(*this);
 
 }
-
-void World::fight(Organism* firstOrganism, Organism* secondOrganism) {
-	//Handle if 2 objects are in the same place
-	//If objects are of the same class -> breeding
-	//Else there is a fight
-	
-}
-
+//
+//void World::fight(Organism* firstOrganism, Organism* secondOrganism) {
+//	//Handle if 2 objects are in the same place
+//	//If objects are of the same class -> breeding
+//	//Else there is a fight
+//
+//	//Jesli moge rzutowac na animal -> to sprawdzamy breeding
+//	//Jesli 
+//	
+//}
 
 void World::makeATurn() {
 	//Invoke act on all objects considering their initiative and age
@@ -51,30 +55,31 @@ void World::makeATurn() {
 
 	//Now we have to sort bordWithOrganismsOnly by their initiatives and age
 	std::sort(boardWithOrganismsOnly.begin(), boardWithOrganismsOnly.end(), [](
-		const Organism* left, const Organism* right) {
+	  Organism* left, Organism* right) -> bool {
 			if (left->initiative == right->initiative) return (left->age < right->age);
 			return (left->initiative < right->initiative);
 		});
 
-	for (size_t i = boardWithOrganismsOnly.size()-1; i > 0; i--) {
+	for (size_t i = boardWithOrganismsOnly.size()-1; i >= 0; i--) {
 		boardWithOrganismsOnly[i]->act();
 		boardWithOrganismsOnly[i]->age++;
+		if (i == 0) break;
 	}
 
-	for (size_t i = 0; i < a; i++) {
-		for (size_t j = 0; j < b; j++) {
-			for (size_t k = 0; k < a; k++) {
-				for (size_t l = 0; l < b; l++) {
-					if (board[i][j] && board[k][l] != nullptr) {
-						if (board[i][j]->getPosX() == board[k][l]->getPosX() && board[i][j]->getPosY() == board[k][l]->getPosY() && i != k && j != l) {
-							//Make collision take organism object as parametr
-							this->fight(board[i][j], board[k][l]);
-						}
-					}
-				} 
-			}
-		}
-	}
+	//for (size_t i = 0; i < a; i++) {
+	//	for (size_t j = 0; j < b; j++) {
+	//		for (size_t k = 0; k < a; k++) {
+	//			for (size_t l = 0; l < b; l++) {
+	//				if (board[i][j] && board[k][l] != nullptr) {
+	//					if (board[i][j]->getPosX() == board[k][l]->getPosX() && board[i][j]->getPosY() == board[k][l]->getPosY() && i != k && j != l) {
+	//						//Make collision take organism object as parametr
+	//						this->fight(board[i][j], board[k][l]);
+	//					}
+	//				}
+	//			} 
+	//		}
+	//	}
+	//}
 
 	for (size_t i = 0; i < a; i++) {
 		for (size_t j = 0; j < b; j++) {
