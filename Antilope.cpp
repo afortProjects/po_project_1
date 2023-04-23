@@ -4,6 +4,9 @@ Antilope::Antilope(World& world) : Animal(world) {
 	this->strength = 4;
 	this->initiative = 4;
 }
+Antilope* Antilope::clone() {
+	return new Antilope(this->world);
+}
 
 void Antilope::draw() {
 	printf("A");
