@@ -9,6 +9,7 @@ public:
 	Plant(World& world);
 	void act() override;
 	Plant* clone();
+	bool didReflectAttack(int opponentStrength) override;
 	void collision() override;
 	void draw() override;
 	~Plant();

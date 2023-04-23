@@ -1,6 +1,6 @@
 #include "Organism.h"
-#include "World.h"
 #include <iostream>
+#include "World.h"
 
 Organism::Organism(World& world) : world(world) {
 	//this->initiative = (1+ (rand() % 10));
@@ -22,7 +22,7 @@ Organism::Organism(World& world, bool isHuman) : world(world) {
 }
 
 Organism* clone() {
-
+	return nullptr;
 }
 
 int Organism::getPosX() {

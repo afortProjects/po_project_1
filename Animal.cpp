@@ -44,9 +44,10 @@ void Animal::act() {
 		this->posX = tempX;
 		this->posY = tempY;
 	}
-	if (this->world.board[this->posX][this->posY] != nullptr) collision();
 	this->beforeMoveX = tempX;
 	this->beforeMoveY = tempY;
+
+	if (this->world.board[this->posX][this->posY] != nullptr) collision();
 }
 void Animal::collision() {
 	//Check if there is the same species nearby, if yes create new object
