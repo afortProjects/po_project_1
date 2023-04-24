@@ -8,10 +8,13 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-Human::Human(World& world) : world(world), Animal(world, true) {
+Human::Human(World& world) : Animal(world, true) {
 	world.board[0][0] = this;
 	this->posX = 0;
 	this->posY = 0;
+	this->initiative = 4;
+	this->strength = 5;
+	this->name = "Human";
 }
 
 void Human::draw() {
@@ -60,6 +63,9 @@ void Human::collision() {
 
 	Animal::collision();
 }
+Human* Human::clone() {
+	return new Human(this->world);
+}
+
 Human::~Human() {
-	exit(0);
 }

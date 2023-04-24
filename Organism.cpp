@@ -3,7 +3,6 @@
 #include "World.h"
 
 Organism::Organism(World& world) : world(world) {
-	//this->initiative = (1+ (rand() % 10));
 	//Constructor
 	this->posX = floor(rand() % world.a);
 	this->posY = floor(rand() % world.b);
@@ -18,7 +17,7 @@ Organism::Organism(World& world) : world(world) {
 }
 
 Organism::Organism(World& world, bool isHuman) : world(world) {
-	//this->initiative = (1+ (rand() % 10));
+
 }
 
 int Organism::addStrength() {
@@ -37,6 +36,14 @@ int Organism::getPosY() {
 	return this->posY;
 }
 
-Organism::~Organism() {
+int Organism::getStrength() {
+	return this->strength;
+}
 
+std::string Organism::getName() {
+	return this->name;
+}
+
+Organism::~Organism() {
+	
 }

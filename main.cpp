@@ -15,9 +15,10 @@ int main() {
 	clearscreen();
 	World world{ a,b };
 	world.drawBoard();
+	world.printLegend();
+	world.printLogs();
 
 	while (world.isRunning) {
-		//world.human->act();
 		world.makeATurn();
 	}
 	return 0;
