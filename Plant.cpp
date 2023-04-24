@@ -3,6 +3,7 @@
 Plant::Plant(World& world) : Organism(world) {
 	this->initiative = 0;
 }
+
 bool Plant::didReflectAttack(int opponentStrength) {
 	return false;
 }
@@ -21,8 +22,11 @@ void Plant::act() {
 			newPlant->posX = newPlantX;
 			newPlant->posY = newPlantY;
 			board[newPlantX][newPlantY] = newPlant;
+			this->world.addLog(this->getName() + " was created.");
 		}
-		this->world.addLog(this->getName() + " was created.");
+		else if (!(this->world.checkIfThereIsPlaceAvailable())) {
+			this->world.endGame("There is no available space. ");
+		}
 
 	}
 

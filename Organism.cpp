@@ -14,6 +14,9 @@ Organism::Organism(World& world) : world(world) {
 	std::vector<std::vector<Organism*>> board = this->world.getBoard();
 
 	while (board[this->posX][this->posY] != nullptr) {
+		if (!(this->world.checkIfThereIsPlaceAvailable())) {
+			this->world.endGame("There is no available space. ");
+		}
 		this->posX = floor(rand() % a);
 		this->posY = floor(rand() % b);
 	}
@@ -60,7 +63,6 @@ void Organism::setAge(int age) {
 	this->age = age;
 }
 
-
 int Organism::getPosX() {
 	return this->posX;
 }
@@ -92,8 +94,6 @@ std::string Organism::getName() {
 int Organism::getInitiative() {
 	return this->initiative;
 }
-
-
 
 Organism::~Organism() {
 	

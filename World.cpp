@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+
 World::World(int a, int b) : a(a), b(b) {
 	for (size_t i = 0; i < a; i++) {
 		std::vector<Organism*> temp;
@@ -29,10 +30,17 @@ World::World(int a, int b) : a(a), b(b) {
 	}
 	
 	this->human = new Human(*this);
+
 	Animal* animal1 = new Sheep(*this);
 	Animal* animal6 = new Sheep(*this);
 
-	Animal* animal2 = new Wolf(*this);
+	Animal* animal11 = new Wolf(*this);
+	//Animal* animal12 = new Wolf(*this);
+	//Animal* animal13 = new Wolf(*this);
+	//Animal* animal14 = new Wolf(*this);
+	//Animal* animal15 = new Wolf(*this);
+
+	//Animal* animal2 = new Wolf(*this);
 	Animal* animal3 = new Fox(*this);
 	Animal* animal4 = new Antilope(*this);
 	Animal* animal5 = new Turtle(*this);
@@ -40,7 +48,7 @@ World::World(int a, int b) : a(a), b(b) {
 
 	//Plant* plant1 = new Dandelion(*this);
 	//Plant* plant2 = new Grass(*this);
-	Plant* plant3 = new Guarana(*this);
+	//Plant* plant3 = new Guarana(*this);
 
 	Plant* plant4 = new Blueberry(*this);
 	Plant* plant5 = new Hogweed(*this);
@@ -55,6 +63,7 @@ void World::makeATurn() {
 	drawBoard();
 	printLegend();
 	printLogs();
+	checkIfHumanIsAlive();
 	//Invoke act on all objects considering their initiative and age
 	std::vector<Organism*> boardWithOrganismsOnly;
 
@@ -103,6 +112,23 @@ void World::endGame() {
 	exit(0);
 }
 
+void World::endGame(std::string message) {
+	clearscreen();
+	printf("%s\n\n", message.c_str());
+	exit(0);
+}
+
+void World::checkIfHumanIsAlive() {
+	for (const auto& row : this->board) {
+		for (const auto& ptr : row) {
+			if (ptr != nullptr && ptr->getName() == "Human") {
+				return;
+			}
+		}
+	}
+	this->endGame();
+}
+
 void World::drawBoard() 
 {
 	int spacesCounter;
@@ -115,7 +141,6 @@ void World::drawBoard()
 		for (size_t j = 0; j < this->a * (SCALE_X + 1); j++) {
 			if (i % 2 == 0) {
 				if (j % (SCALE_X + 1) == 0) {
-					//int k = (i / SCALE_Y) * (this->a) + (j / (SCALE_X + 1)); // 4 * 3 = 12 + 2 = 14
 					if (this->board[j / (SCALE_X + 1)][i / SCALE_Y] != nullptr && this->board[j/(SCALE_X+1)][i/SCALE_Y]->getName() != "Human") {
 						this->board[j / (SCALE_X + 1)][i / SCALE_Y]->draw();
 					}
@@ -141,8 +166,6 @@ void World::drawBoard()
 		if (i % 2 == 1) dashCounter++;
 		printf("\n");
 	}
-	//showCursor();
-	//gotoxy(0, 40);
 	gotoxy(this->human->getPosX() * (SCALE_X + 1) + 1, this->human->getPosY() * SCALE_Y + 1);
 	this->human->draw();
 }
@@ -162,8 +185,6 @@ void World::printLogs() {
 		gotoxy(this->a * (SCALE_X + 1) + 50, (i+5));
 		printf("%d. %s\n",this->logs.size() - i, this->logs[i].c_str());
 	}
-
-	printf("--------------------\n");
 
 }
 
@@ -204,12 +225,13 @@ void World::printLegend() {
 	printf("d - Dandelion\n");
 	gotoxy(this->a*(SCALE_X+1) + 10, 18);
 	printf("--------------------\n");
-	printf("------ Controls ------\n");
 	gotoxy(this->a * (SCALE_X + 1) + 10, 19);
-	printf("arrows - move\n");
+	printf("----- Controls -----\n");
 	gotoxy(this->a * (SCALE_X + 1) + 10, 20);
-	printf("v - special power\n");
+	printf("arrows - move\n");
 	gotoxy(this->a * (SCALE_X + 1) + 10, 21);
+	printf("v - special power\n");
+	gotoxy(this->a * (SCALE_X + 1) + 10, 22);
 	printf("--------------------\n");
 
 }
@@ -219,9 +241,10 @@ void World::save() {
 	std::string fileName, logsFileName;
 	std::cout << "Your file name: ";
 	std::cin >> fileName;
-	std::cout << std::endl;
 	logsFileName += fileName + "_logs.txt";
 	fileName += ".txt";
+	std::cout << std::endl;
+
 	std::ofstream outputFile(fileName, std::ios::out);
 	std::ofstream logsOutputFile(logsFileName, std::ios::out);
 
@@ -230,6 +253,7 @@ void World::save() {
 	outputFile << this->b << ' ';
 	outputFile << '\n';
 
+	//Save logs
 	logsOutputFile << this->logs.size();
 	logsOutputFile << '\n';
 	for (auto& i : this->logs) {
@@ -240,8 +264,7 @@ void World::save() {
 	bool isAbilityOnCooldown;
 	int tempNameSize, tempX, tempY, tempBeforeMoveX, tempBeforeMoveY, tempAge, null_value_int = 0, abilityCooldown, humanStrength;
 	char null_value[] = "NULL";
-	char name[256];
-	const char* tempNameInChar;
+
 	for (size_t i = 0; i < this->a; i++) {
 		for (size_t j = 0; j < this->b; j++) {
 			if (this->board[i][j] == nullptr) {
@@ -268,6 +291,7 @@ void World::save() {
 				outputFile << tempBeforeMoveX << ' ';
 				outputFile << tempBeforeMoveY << ' ';
 				outputFile << tempAge << ' ';
+
 				if (tempName == "Human") {
 					isAbilityOnCooldown = dynamic_cast<Human*>(this->board[i][j])->getIsAbilityTurnedOn();
 					abilityCooldown = dynamic_cast<Human*>(this->board[i][j])->getAbilityCooldown();
@@ -293,9 +317,9 @@ void World::load() {
 	std::string fileName, logsFileName;
 	std::cout << "Your file name: ";
 	std::cin >> fileName;
-	std::cout << std::endl;
 	logsFileName += fileName + "_logs.txt";
 	fileName += ".txt";
+	std::cout << std::endl;
 
 	std::ifstream inputFile(fileName, std::ios::in);
 	std::ifstream logsInputFile(logsFileName, std::ios::in);
@@ -303,22 +327,22 @@ void World::load() {
 	int a, b;
 	std::deque<std::string> logs;
 	this->logs = logs;
+
 	inputFile >> a;
 	inputFile >> b;
+	this->a = a;
+	this->b = b;
 
 	int logsSize;
 	logsInputFile >> logsSize;
 	std::string tempLog;
 
 	for (int i = 0; i < logsSize; i++) {
-		//inputFile >> std::noskipws >> tempLog;
 		std::getline(logsInputFile, tempLog);
 		this->logs.push_back(tempLog);
 		tempLog = "";
 	}
 
-	this->a = a;
-	this->b = b;
 	for (size_t i = 0; i < a; i++) {
 		std::vector<Organism*> temp;
 		for (size_t j = 0; j < b; j++) {
@@ -427,6 +451,20 @@ void World::load() {
 	inputFile.close();
 }
 
+bool World::checkIfThereIsPlaceAvailable() {
+	int count = 0;
+
+	for (const auto& row : this->board) {
+		for (const auto& ptr : row) {
+			if (ptr == nullptr) {
+				count++;
+			}
+		}
+	}
+	return count == 0 ? false : true;
+}
+
+
 std::vector<std::vector<Organism*>> World::getBoard() {
 	return this->board;
 }
@@ -452,5 +490,12 @@ void World::setBoard(std::vector<std::vector<Organism*>> newBoard) {
 }
 
 World::~World() {
-	//Clear board, human
+	//Clear board
+	for (const auto& row : this->board) {
+		for (const auto& ptr : row) {
+			if (ptr != nullptr) {
+				delete ptr;
+			}
+		}
+	}
 }

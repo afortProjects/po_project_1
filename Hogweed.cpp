@@ -24,7 +24,6 @@ void Hogweed::act() {
 		board[this->posX - 1][this->posY] = nullptr;
 		if(animalToDelete != nullptr)
 			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
-		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 
 	}
@@ -33,7 +32,6 @@ void Hogweed::act() {
 		board[this->posX + 1][this->posY] = nullptr;
 		if (animalToDelete != nullptr)
 			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
-		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 	}
 	if (this->posY > 0 && dynamic_cast<Animal*>(board[this->posX][this->posY - 1]) != nullptr) {
@@ -41,7 +39,6 @@ void Hogweed::act() {
 		board[this->posX][this->posY - 1] = nullptr;
 		if (animalToDelete != nullptr)
 			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
-		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 
 	}
@@ -50,7 +47,6 @@ void Hogweed::act() {
 		board[this->posX][this->posY + 1] = nullptr;
 		if (animalToDelete != nullptr)
 			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
-		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 	}
 

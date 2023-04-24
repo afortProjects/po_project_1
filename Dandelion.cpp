@@ -31,8 +31,10 @@ void Dandelion::act() {
 				newDandelion->posY = newPlantY;
 				board[newPlantX][newPlantY] = newDandelion;
 				this->world.addLog(this->getName() + " was created.");
-
 				break;
+			}
+			else if (!(this->world.checkIfThereIsPlaceAvailable())) {
+				this->world.endGame("There is no available space. ");
 			}
 		}
 	}

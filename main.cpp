@@ -4,12 +4,13 @@
 #include "Animal.h"
 #include "Human.h"
 #include "Plant.h"
+#include <Windows.h>
 using namespace std;
 
 int main() {
 	srand(time(0));
 	int a, b, choice;
-	//system("mode 650");
+	::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 	cout << "Menu: \n";
 	cout << "1. Start new game\n";
 	cout << "2. Load game from file\n";
@@ -29,6 +30,9 @@ int main() {
 		while (world.getState()) {
 			world.makeATurn();
 		}
+	}
+	else {
+		printf("Wrong input. \n");
 	}
 	return 0;
 }

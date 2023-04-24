@@ -116,9 +116,11 @@ void Animal::breed() {
 	this->world.setBoard(board);
 
 }
+
 Animal* Animal::clone() {
 	return nullptr;
 }
+
 void Animal::collision() {
 	//Check if there is the same species nearby, if yes create new object
 	std::vector<std::vector<Organism*>> board = this->world.getBoard();
@@ -133,38 +135,35 @@ void Animal::collision() {
 		this->strength += opponent->addStrength();
 
 		if (this->strength >= opponent->getStrength()) {
-			if (opponent->getName() == "Human") this->world.endGame();
-			//delete opponent;
-			//board[this->beforeMoveX][this->beforeMoveY] = nullptr;
 			board[this->posX][this->posY] = nullptr;
 			this->world.addLog(opponent->getName() + " just died, was killed by " + this->name + ".");
 
 		}
 
 		else if (this->strength < opponent->getStrength()) {
-			if (this->getName() == "Human") this->world.endGame();
 			board[this->beforeMoveX][this->beforeMoveY] = nullptr;
-			//this = nullptr;
-			//delete this
 			this->world.addLog(this->name + " just died, was killed by " + opponent->getName() + ".");
 
 		}
+		this->world.setBoard(board);
+
 	}
 	else {
 		this->posX = this->beforeMoveX;
 		this->posY = this->beforeMoveY;
 	}
-	this->world.setBoard(board);
 
 }
 
 void Animal::draw() {
 	printf("A");
 }
+
 bool Animal::didReflectAttack(int opponentStrength) {
 	//Check for attack reflection (turtle)
 	return false;
 }
+
 Animal::~Animal() {
 	//Destructor
 }

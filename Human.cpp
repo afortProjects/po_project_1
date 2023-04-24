@@ -21,8 +21,6 @@ Human::Human(World& world) : Animal(world, true) {
 	this->strength = 5;
 	this->name = "Human";
 	this->world.setBoard(board);
-
-
 }
 
 void Human::draw() {
@@ -53,6 +51,19 @@ void Human::act() {
 	this->beforeMoveX = this->posX;
 	this->beforeMoveY = this->posY;
 
+	if (this->isAbilityTurnedOn) {
+		this->abilityCooldown = ABILITY_COOLDOWN;
+		if (this->strength == BASE_STRENGTH) {
+			this->isAbilityTurnedOn = false;
+		}
+		else this->strength--;
+	}
+	else {
+		if (this->abilityCooldown > 0) {
+			this->abilityCooldown--;
+		}
+	}
+
 	while (this->posX == this->beforeMoveX && this->posY == this->beforeMoveY) {
 		newInput = _getch();
 		
@@ -70,19 +81,6 @@ void Human::act() {
 		}
 	}
 	
-	if (this->isAbilityTurnedOn) {
-		this->abilityCooldown = ABILITY_COOLDOWN;
-		if (this->strength == BASE_STRENGTH) {
-			this->isAbilityTurnedOn = false;
-		}
-		else this->strength--;
-	}
-	else {
-		if (this->abilityCooldown > 0) {
-			this->abilityCooldown--;
-		}
-	}
-
 	//Check if in board
 
 	if (this->posX < 0)	this->posX = 0;
@@ -101,13 +99,10 @@ void Human::abillity() {
 		this->isAbilityTurnedOn = true;
 		this->strength = ABILITY_STRENGTH;
 		this->world.addLog("You have activated you super ability! ");
-
 	}
 }
 
 void Human::collision() {
-	//Handle special ability and check for collision with other objects
-
 	Animal::collision();
 }
 Human* Human::clone() {

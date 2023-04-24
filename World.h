@@ -20,11 +20,15 @@ public:
 	World(int a, int b);
 	void makeATurn();
 	void endGame();
+	void endGame(std::string message);
 	void drawBoard();
 	void printLogs();
 	void printLegend();
 	void save();
 	void load();
+
+	bool checkIfThereIsPlaceAvailable();
+	void checkIfHumanIsAlive();
 
 	int getA();
 	int getB();
