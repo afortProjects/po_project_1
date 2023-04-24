@@ -19,9 +19,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
-World::World(int a, int b) {
-	this->a = a;
-	this->b = b;
+World::World(int a, int b) : a(a), b(b) {
 	for (size_t i = 0; i < a; i++) {
 		std::vector<Organism*> temp;
 		for (size_t j = 0; j < b; j++) {
@@ -51,7 +49,12 @@ World::World(int a, int b) {
 World::World() {
 	load();
 }
+
 void World::makeATurn() {
+	clearscreen();
+	drawBoard();
+	printLegend();
+	printLogs();
 	//Invoke act on all objects considering their initiative and age
 	std::vector<Organism*> boardWithOrganismsOnly;
 
@@ -66,13 +69,13 @@ void World::makeATurn() {
 	//Now we have to sort bordWithOrganismsOnly by their initiatives and age
 	std::sort(boardWithOrganismsOnly.begin(), boardWithOrganismsOnly.end(), [](
 		Organism* left, Organism* right) -> bool {
-			if (left->initiative == right->initiative) return (left->age < right->age);
-			return (left->initiative < right->initiative);
+			if (left->getInitiative() == right->getInitiative()) return (left->getAge() < right->getAge());
+			return (left->getInitiative() < right->getInitiative());
 		});
 
 	for (int i = boardWithOrganismsOnly.size() - 1; i >= 0; i--) {
 		if (boardWithOrganismsOnly[i] != nullptr) {
-			boardWithOrganismsOnly[i]->age++;
+			boardWithOrganismsOnly[i]->setAge(boardWithOrganismsOnly[i]->getAge()+1);
 			boardWithOrganismsOnly[i]->act();
 
 			drawBoard();
@@ -91,10 +94,7 @@ void World::makeATurn() {
 			}
 		}
 	}
-	clearscreen();
-	drawBoard();
-	printLegend();
-	printLogs();
+
 }
 
 void World::endGame() {
@@ -425,6 +425,30 @@ void World::load() {
 	}
 
 	inputFile.close();
+}
+
+std::vector<std::vector<Organism*>> World::getBoard() {
+	return this->board;
+}
+
+int World::getA() {
+	return this->a;
+}
+
+int World::getB() {
+	return this->b;
+}
+
+bool World::getState() {
+	return this->isRunning;
+}
+
+void World::addLog(std::string message) {
+	this->logs.push_front(message);
+}
+
+void World::setBoard(std::vector<std::vector<Organism*>> newBoard) {
+	this->board = newBoard;
 }
 
 World::~World() {

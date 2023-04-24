@@ -23,11 +23,11 @@ Turtle* Turtle::clone() {
 }
 bool Turtle::didReflectAttack(int opponentStrength) {
 	if (opponentStrength < 5) {
-		this->world.logs.push_front(this->getName() + " just reflected attack.");
+		this->world.addLog(this->getName() + " just reflected attack.");
 		return true;
 	}
 	else {
-		this->world.logs.push_front(this->getName() + " just failed to reflect attack.");
+		this->world.addLog(this->getName() + " just failed to refle attack.");
 
 		return false;
 	}

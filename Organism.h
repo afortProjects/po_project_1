@@ -6,10 +6,9 @@ class Organism {
 protected:
 	World& world;
 	int posX = 0, posY = 0;
-public:
-	int initiative = 0	, age = 0, strength = 0, beforeMoveX=0, beforeMoveY=0;
+	int initiative = 0, age = 0, strength = 0, beforeMoveX = 0, beforeMoveY = 0;
 	std::string name = "";
-
+public:
 	Organism(World& world);
 	Organism(World& world, bool isHuman);
 
@@ -18,9 +17,6 @@ public:
 	void virtual collision() = 0;
 	void virtual draw() = 0;
 	int virtual addStrength();
-
-	//friend std::ostream& operator<<(std::ostream& os, const Organism* obj);
-	//friend std::istream& operator>>(std::ostream& os, const Organism* obj); 
 
 	void setPosX(int x);
 	void setPosY(int y);
@@ -36,8 +32,10 @@ public:
 	int getBeforeMoveX();
 	int getBeforeMoveY();
 	int getAge();
+	int getStrength();
+	int getInitiative();
 
 	std::string getName();
-	int getStrength();
+
 	~Organism();
 };

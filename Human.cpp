@@ -13,12 +13,16 @@
 #define ABILITY_COOLDOWN 5
 
 Human::Human(World& world) : Animal(world, true) {
-	world.board[0][0] = this;
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+	board[0][0] = this;
 	this->posX = 0;
 	this->posY = 0;
 	this->initiative = 4;
 	this->strength = 5;
 	this->name = "Human";
+	this->world.setBoard(board);
+
+
 }
 
 void Human::draw() {
@@ -58,7 +62,7 @@ void Human::act() {
 		}
 		else if (newInput == 'v') {
 			Human::abillity();
-			gotoxy(this->world.a * (SCALE_X + 1) + 50, 4);
+			gotoxy(this->world.getA() * (SCALE_X + 1) + 50, 4);
 			printf("Strength: %d\n", this->strength);
 		}
 		else if (newInput == 's') {
@@ -84,10 +88,11 @@ void Human::act() {
 	if (this->posX < 0)	this->posX = 0;
 	if (this->posY < 0) this->posY = 0;
 
-	if (this->posX > this->world.a - 1) this->posX--;
-	if (this->posY > this->world.b - 1) this->posY--;
+	if (this->posX > this->world.getA() - 1) this->posX--;
+	if (this->posY > this->world.getB() - 1) this->posY--;
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
 
-	if (this->world.board[this->posX][this->posY] != nullptr && this->posX != this->beforeMoveX && this->posY != this->beforeMoveY) collision();
+	if (board[this->posX][this->posY] != nullptr && this->posX != this->beforeMoveX && this->posY != this->beforeMoveY) collision();
 
 }
 
@@ -95,7 +100,7 @@ void Human::abillity() {
 	if (this->abilityCooldown == 0) {
 		this->isAbilityTurnedOn = true;
 		this->strength = ABILITY_STRENGTH;
-		this->world.logs.push_front("You have activated you super ability! ");
+		this->world.addLog("You have activated you super ability! ");
 
 	}
 }

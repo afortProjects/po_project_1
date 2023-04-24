@@ -4,16 +4,24 @@
 
 Organism::Organism(World& world) : world(world) {
 	//Constructor
-	this->posX = floor(rand() % world.a);
-	this->posY = floor(rand() % world.b);
+	int a = world.getA();
+	int b = world.getB();
+
+	this->posX = floor(rand() % a);
+	this->posY = floor(rand() %b);
 
 	//Check if place is not occupied
-	while (this->world.board[this->posX][this->posY] != nullptr) {
-		this->posX = floor(rand() % this->world.a);
-		this->posY = floor(rand() % this->world.b);
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+
+	while (board[this->posX][this->posY] != nullptr) {
+		this->posX = floor(rand() % a);
+		this->posY = floor(rand() % b);
 	}
 
-	this->world.board[this->posX][this->posY] = this;
+	board[this->posX][this->posY] = this;
+
+	this->world.setBoard(board);
+
 }
 
 Organism::Organism(World& world, bool isHuman) : world(world) {
@@ -81,15 +89,11 @@ std::string Organism::getName() {
 	return this->name;
 }
 
-//std::ostream& operator<<(std::ostream& os, const Organism* obj) {
-//	os << obj.name << " " << obj.age << std::endl;
-//	return os;
-//}
-//
-//std::istream& operator>>(std::istream& is, const Organism* obj) {
-//	is >> obj.name >> obj.age << std::endl;
-//	return is;
-//}
+int Organism::getInitiative() {
+	return this->initiative;
+}
+
+
 
 Organism::~Organism() {
 	

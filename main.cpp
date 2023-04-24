@@ -18,24 +18,15 @@ int main() {
 		printf("Give a, b: ");
 		cin >> a >> b;
 		World world{ a,b };
-		clearscreen();
-		world.drawBoard();
-		world.printLegend();
-		world.printLogs();
 
-		while (world.isRunning) {
+		while (world.getState()) {
 			world.makeATurn();
 		}
 	}
 	else if (choice == 2) {
 		World world{};
 
-		clearscreen();
-		world.drawBoard();
-		world.printLegend();
-		world.printLogs();
-
-		while (world.isRunning) {
+		while (world.getState()) {
 			world.makeATurn();
 		}
 	}

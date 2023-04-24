@@ -15,6 +15,9 @@ Dandelion* Dandelion::clone() {
 }
 
 void Dandelion::act() {
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+	 
+
 	for (int i = 0; i < 3; i++) {
 		if (rand() % 2 && rand() % 2) {
 			int newPlantX, newPlantY;
@@ -23,14 +26,17 @@ void Dandelion::act() {
 
 			if (foundNewPlace) {
 				Dandelion* newDandelion = this->clone();
-				this->world.board[newDandelion->getPosX()][newDandelion->getPosY()] = nullptr;
+				board[newDandelion->getPosX()][newDandelion->getPosY()] = nullptr;
 				newDandelion->posX = newPlantX;
 				newDandelion->posY = newPlantY;
-				this->world.board[newPlantX][newPlantY] = newDandelion;
-				this->world.logs.push_front(this->getName() + " was created.");
+				board[newPlantX][newPlantY] = newDandelion;
+				this->world.addLog(this->getName() + " was created.");
 
 				break;
 			}
 		}
 	}
+	this->world.setBoard(board);
+
+
 }

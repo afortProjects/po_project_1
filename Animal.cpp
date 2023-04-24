@@ -38,65 +38,66 @@ void Animal::act() {
 		}
 	}
 
-	if (tempX >= 0 && tempX < this->world.a && tempY >= 0 && tempY < this->world.b) {
+	if (tempX >= 0 && tempX < this->world.getA() && tempY >= 0 && tempY < this->world.getB()) {
 		this->posX = tempX;
 		this->posY = tempY;
-		this->world.logs.push_front(this->name + " moved to " + std::to_string(this->posX) + ", " + std::to_string(this->posY));
+		this->world.addLog(this->name + " moved to " + std::to_string(this->posX) + ", " + std::to_string(this->posY));
 
 	}
 
-
-	if (this->world.board[this->posX][this->posY] != nullptr && this->world.board[this->posX][this->posY] != this) collision();
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+	if (board[this->posX][this->posY] != nullptr && board[this->posX][this->posY] != this) collision();
 
 }
 
 void Animal::breed() {
 	Animal* newAnimal = this->clone();
 	//Find place for new animal
-	this->world.board[newAnimal->posX][newAnimal->posY] = nullptr;
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+	board[newAnimal->posX][newAnimal->posY] = nullptr;
 	bool foundPlace = false;
-	if (this->posX+1 < this->world.a && this->world.board[this->posX + 1][this->posY] == nullptr) {
+	if (this->posX+1 < this->world.getA() && board[this->posX + 1][this->posY] == nullptr) {
 		newAnimal->posX = this->posX + 1;
 		newAnimal->posY = this->posY;
 		foundPlace = true;
 	}
-	else if (this->posX > 0 && this->world.board[this->posX - 1][this->posY] == nullptr) {
+	else if (this->posX > 0 && board[this->posX - 1][this->posY] == nullptr) {
 		newAnimal->posX = this->posX - 1;
 		newAnimal->posY = this->posY;
 		foundPlace = true;
 
 	}
-	else if (this->posY + 1 < this->world.b && this->world.board[this->posX][this->posY + 1] == nullptr) {
+	else if (this->posY + 1 < this->world.getB() && board[this->posX][this->posY + 1] == nullptr) {
 		newAnimal->posX = this->posX;
 		newAnimal->posY = this->posY + 1;
 		foundPlace = true;
 
 	}
-	else if (this->posY > 0 && this->world.board[this->posX][this->posY - 1] == nullptr ) {
+	else if (this->posY > 0 && board[this->posX][this->posY - 1] == nullptr ) {
 		newAnimal->posX = this->posX;
 		newAnimal->posY = this->posY - 1;
 		foundPlace = true;
 
 	}
-	else if (this->beforeMoveX + 1 < this->world.a && this->world.board[this->beforeMoveX + 1][this->beforeMoveY] == nullptr) {
+	else if (this->beforeMoveX + 1 < this->world.getA() && board[this->beforeMoveX + 1][this->beforeMoveY] == nullptr) {
 		newAnimal->posX = this->beforeMoveX + 1;
 		newAnimal->posY = this->beforeMoveY;
 		foundPlace = true;
 
 	}
-	else if (this->beforeMoveX > 0 && this->world.board[this->beforeMoveX - 1][this->beforeMoveY] == nullptr) {
+	else if (this->beforeMoveX > 0 && board[this->beforeMoveX - 1][this->beforeMoveY] == nullptr) {
 		newAnimal->posX = this->beforeMoveX - 1;
 		newAnimal->posY = this->beforeMoveY;
 		foundPlace = true;
 
 	}
-	else if (this->beforeMoveY + 1 < this->world.b && this->world.board[this->beforeMoveX][this->beforeMoveY + 1] == nullptr) {
+	else if (this->beforeMoveY + 1 < this->world.getB() && board[this->beforeMoveX][this->beforeMoveY + 1] == nullptr) {
 		newAnimal->posX = this->beforeMoveX;
 		newAnimal->posY = this->beforeMoveY + 1;
 		foundPlace = true;
 
 	}
-	else if (this->beforeMoveY > 0 && this->world.board[this->beforeMoveX][this->beforeMoveY - 1] == nullptr) {
+	else if (this->beforeMoveY > 0 && board[this->beforeMoveX][this->beforeMoveY - 1] == nullptr) {
 		newAnimal->posX = this->beforeMoveX;
 		newAnimal->posY = this->beforeMoveY - 1;
 		foundPlace = true;
@@ -106,12 +107,13 @@ void Animal::breed() {
 	this->posX = this->beforeMoveX;
 	this->posY = this->beforeMoveY;
 	if (foundPlace) {
-		this->world.board[newAnimal->posX][newAnimal->posY] = newAnimal;
-		this->world.logs.push_front("New " + this->name + " spawned. ");
+		board[newAnimal->posX][newAnimal->posY] = newAnimal;
+		this->world.addLog("New " + this->name + " spawned. ");
 	}
 	else {
 		delete newAnimal;
 	}
+	this->world.setBoard(board);
 
 }
 Animal* Animal::clone() {
@@ -119,31 +121,32 @@ Animal* Animal::clone() {
 }
 void Animal::collision() {
 	//Check if there is the same species nearby, if yes create new object
-	if (this->name ==this->world.board[this->posX][this->posY]->name) {
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+	if (this->name ==board[this->posX][this->posY]->getName()) {
 		this->breed();
 	}
-	else if (!(this->world.board[this->posX][this->posY]->didReflectAttack(this->strength))) {
+	else if (!(board[this->posX][this->posY]->didReflectAttack(this->strength))) {
 		//We have a fight
-		Organism* opponent = this->world.board[this->posX][this->posY];
+		Organism* opponent = board[this->posX][this->posY];
 
 		//Check if guarana
 		this->strength += opponent->addStrength();
 
-		if (this->strength >= opponent->strength) {
+		if (this->strength >= opponent->getStrength()) {
 			if (opponent->getName() == "Human") this->world.endGame();
 			//delete opponent;
-			//this->world.board[this->beforeMoveX][this->beforeMoveY] = nullptr;
-			this->world.board[this->posX][this->posY] = nullptr;
-			this->world.logs.push_front(opponent->getName() + " just died, was killed by " + this->name + ".");
+			//board[this->beforeMoveX][this->beforeMoveY] = nullptr;
+			board[this->posX][this->posY] = nullptr;
+			this->world.addLog(opponent->getName() + " just died, was killed by " + this->name + ".");
 
 		}
 
-		else if (this->strength < opponent->strength) {
+		else if (this->strength < opponent->getStrength()) {
 			if (this->getName() == "Human") this->world.endGame();
-			this->world.board[this->beforeMoveX][this->beforeMoveY] = nullptr;
+			board[this->beforeMoveX][this->beforeMoveY] = nullptr;
 			//this = nullptr;
 			//delete this
-			this->world.logs.push_front(this->name + " just died, was killed by " + opponent->getName() + ".");
+			this->world.addLog(this->name + " just died, was killed by " + opponent->getName() + ".");
 
 		}
 	}
@@ -151,6 +154,8 @@ void Animal::collision() {
 		this->posX = this->beforeMoveX;
 		this->posY = this->beforeMoveY;
 	}
+	this->world.setBoard(board);
+
 }
 
 void Animal::draw() {

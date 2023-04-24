@@ -17,40 +17,44 @@ void Hogweed::draw() {
 
 void Hogweed::act() {
 	//Killing all animals nearby
-	if (this->posX > 0 && dynamic_cast<Animal*>(this->world.board[this->posX - 1][this->posY]) != nullptr) {
-		Organism* animalToDelete = this->world.board[this->posX - 1][this->posY];
-		this->world.board[this->posX - 1][this->posY] = nullptr;
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+
+	if (this->posX > 0 && dynamic_cast<Animal*>(board[this->posX - 1][this->posY]) != nullptr) {
+		Organism* animalToDelete = board[this->posX - 1][this->posY];
+		board[this->posX - 1][this->posY] = nullptr;
 		if(animalToDelete != nullptr)
-			this->world.logs.push_front(animalToDelete->getName() + " was just killed by Hogweed.");
+			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
 		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 
 	}
-	if (this->posX + 1 < this->world.a && dynamic_cast<Animal*>(this->world.board[this->posX + 1][this->posY]) != nullptr) {
-		Organism* animalToDelete = this->world.board[this->posX + 1][this->posY];
-		this->world.board[this->posX + 1][this->posY] = nullptr;
+	if (this->posX + 1 < this->world.getA() && dynamic_cast<Animal*>(board[this->posX + 1][this->posY]) != nullptr) {
+		Organism* animalToDelete = board[this->posX + 1][this->posY];
+		board[this->posX + 1][this->posY] = nullptr;
 		if (animalToDelete != nullptr)
-			this->world.logs.push_front(animalToDelete->getName() + " was just killed by Hogweed.");
+			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
 		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 	}
-	if (this->posY > 0 && dynamic_cast<Animal*>(this->world.board[this->posX][this->posY -1]) != nullptr) {
-		Organism* animalToDelete = this->world.board[this->posX][this->posY -1];
-		this->world.board[this->posX][this->posY-1] = nullptr;
+	if (this->posY > 0 && dynamic_cast<Animal*>(board[this->posX][this->posY - 1]) != nullptr) {
+		Organism* animalToDelete = board[this->posX][this->posY - 1];
+		board[this->posX][this->posY - 1] = nullptr;
 		if (animalToDelete != nullptr)
-			this->world.logs.push_front(animalToDelete->getName() + " was just killed by Hogweed.");
+			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
 		if (animalToDelete->getName() == "Human") this->world.endGame();
 
 
 	}
-	if (this->posY + 1 < this->world.b && dynamic_cast<Animal*>(this->world.board[this->posX][this->posY + 1]) != nullptr) {
-		Organism* animalToDelete = this->world.board[this->posX][this->posY + 1];
-		this->world.board[this->posX][this->posY + 1] = nullptr;
+	if (this->posY + 1 < this->world.getB() && dynamic_cast<Animal*>(board[this->posX][this->posY + 1]) != nullptr) {
+		Organism* animalToDelete = board[this->posX][this->posY + 1];
+		board[this->posX][this->posY + 1] = nullptr;
 		if (animalToDelete != nullptr)
-			this->world.logs.push_front(animalToDelete->getName() + " was just killed by Hogweed.");
+			this->world.addLog(animalToDelete->getName() + " was just killed by Hogweed.");
 		if (animalToDelete->getName() == "Human") this->world.endGame();
 
-
 	}
+
+	this->world.setBoard(board);
+
 	Plant::act();
 }

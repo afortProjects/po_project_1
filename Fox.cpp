@@ -12,20 +12,22 @@ void Fox::draw() {
 }
 
 void Fox::act() {
-	if (this->posX > 0 && (this->world.board[this->posX - 1][this->posY] == nullptr || this->world.board[this->posX - 1][this->posY]->strength < this->strength)) {
+	std::vector<std::vector<Organism*>> board = this->world.getBoard();
+
+	if (this->posX > 0 && (board[this->posX - 1][this->posY] == nullptr || board[this->posX - 1][this->posY]->getStrength() < this->strength)) {
 		this->posX--;
 	}
-	else if (this->posX + 1 < this->world.a && (this->world.board[this->posX + 1][this->posY] == nullptr || this->world.board[this->posX + 1][this->posY]->strength < this->strength)) {
+	else if (this->posX + 1 < this->world.getA() && (board[this->posX + 1][this->posY] == nullptr || board[this->posX + 1][this->posY]->getStrength() < this->strength)) {
 		this->posX++;
 	}
-	else if (this->posY > 0 && (this->world.board[this->posX][this->posY - 1] == nullptr || this->world.board[this->posX][this->posY - 1]->strength < this->strength)) {
+	else if (this->posY > 0 && (board[this->posX][this->posY - 1] == nullptr || board[this->posX][this->posY - 1]->getStrength() < this->strength)) {
 		this->posY--;
 	}
-	else if (this->posY + 1 < this->world.b && (this->world.board[this->posX][this->posY + 1] == nullptr || this->world.board[this->posX][this->posY + 1]->strength < this->strength)) {
+	else if (this->posY + 1 < this->world.getB() && (board[this->posX][this->posY + 1] == nullptr || board[this->posX][this->posY + 1]->getStrength() < this->strength)) {
 		this->posY++;
 	}
 
-	if (this->world.board[this->posX][this->posY] != nullptr) collision();
+	if (board[this->posX][this->posY] != nullptr) collision();
 }
 
 Fox* Fox::clone() {

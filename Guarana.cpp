@@ -11,7 +11,7 @@ void Guarana::draw() {
 }
 
 int Guarana::addStrength() {
-	this->world.logs.push_front(this->getName() + " just added strength.");
+	this->world.addLog(this->getName() + " just added strength.");
 	return 3;
 }
 
