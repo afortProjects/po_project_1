@@ -9,6 +9,13 @@ private:
 public:
 	Human(World& world);
 	Human* clone() override;
+
+	bool getIsAbilityTurnedOn();
+	int getAbilityCooldown();
+
+	void setIsAbilityTurnedOn(bool value);
+	void setAbilityCooldown(int cooldown);
+
 	void handleInput();
 	void act();
 	void draw();

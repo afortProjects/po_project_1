@@ -16,11 +16,14 @@ public:
 	bool isRunning = true;
 	Human* human;
 
+	World();
 	World(int a, int b);
 	void makeATurn();
 	void endGame();
 	void drawBoard();
 	void printLogs();
 	void printLegend();
+	void save();
+	void load();
 	~World();
 };

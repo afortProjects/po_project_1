@@ -49,6 +49,23 @@ void Human::act() {
 	this->beforeMoveX = this->posX;
 	this->beforeMoveY = this->posY;
 
+	while (this->posX == this->beforeMoveX && this->posY == this->beforeMoveY) {
+		newInput = _getch();
+		
+
+		if (newInput == 0 || newInput == 224) {
+			handleInput();
+		}
+		else if (newInput == 'v') {
+			Human::abillity();
+			gotoxy(this->world.a * (SCALE_X + 1) + 50, 4);
+			printf("Strength: %d\n", this->strength);
+		}
+		else if (newInput == 's') {
+			this->world.save();
+		}
+	}
+	
 	if (this->isAbilityTurnedOn) {
 		this->abilityCooldown = ABILITY_COOLDOWN;
 		if (this->strength == BASE_STRENGTH) {
@@ -59,17 +76,6 @@ void Human::act() {
 	else {
 		if (this->abilityCooldown > 0) {
 			this->abilityCooldown--;
-		}
-	}
-
-	while (this->posX == this->beforeMoveX && this->posY == this->beforeMoveY) {
-		newInput = _getch();
-
-		if (newInput == 0 || newInput == 224) {
-			handleInput();
-		}
-		else if (newInput == 'v') {
-			Human::abillity();
 		}
 	}
 
@@ -101,6 +107,21 @@ void Human::collision() {
 }
 Human* Human::clone() {
 	return new Human(this->world);
+}
+
+bool Human::getIsAbilityTurnedOn() {
+	return this->isAbilityTurnedOn;
+}
+int Human::getAbilityCooldown() {
+	return this->abilityCooldown;
+}
+
+void Human::setIsAbilityTurnedOn(bool value) {
+	this->isAbilityTurnedOn = value;
+}
+void Human::setAbilityCooldown(int cooldown) {
+	this->abilityCooldown= cooldown;
+
 }
 
 Human::~Human() {

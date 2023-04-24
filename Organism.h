@@ -19,8 +19,24 @@ public:
 	void virtual draw() = 0;
 	int virtual addStrength();
 
+	//friend std::ostream& operator<<(std::ostream& os, const Organism* obj);
+	//friend std::istream& operator>>(std::ostream& os, const Organism* obj); 
+
+	void setPosX(int x);
+	void setPosY(int y);
+
+	void setBeforeMoveX(int x);
+	void setBeforeMoveY(int y);
+
+	void setAge(int age);
+	void setStrength(int newStrength);
+
 	int getPosX();
 	int getPosY();
+	int getBeforeMoveX();
+	int getBeforeMoveY();
+	int getAge();
+
 	std::string getName();
 	int getStrength();
 	~Organism();

@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "World.h"
 #include "Wolf.h"
 #include "Sheep.h"
@@ -16,7 +17,8 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-
+#include <fstream>
+#include <string>
 World::World(int a, int b) {
 	this->a = a;
 	this->b = b;
@@ -46,6 +48,9 @@ World::World(int a, int b) {
 	Plant* plant5 = new Hogweed(*this);
 }
 
+World::World() {
+	load();
+}
 void World::makeATurn() {
 	//Invoke act on all objects considering their initiative and age
 	std::vector<Organism*> boardWithOrganismsOnly;
@@ -207,6 +212,219 @@ void World::printLegend() {
 	gotoxy(this->a * (SCALE_X + 1) + 10, 21);
 	printf("--------------------\n");
 
+}
+
+void World::save() {
+	clearscreen();
+	std::string fileName, logsFileName;
+	std::cout << "Your file name: ";
+	std::cin >> fileName;
+	std::cout << std::endl;
+	logsFileName += fileName + "_logs.txt";
+	fileName += ".txt";
+	std::ofstream outputFile(fileName, std::ios::out);
+	std::ofstream logsOutputFile(logsFileName, std::ios::out);
+
+	//Save a, b
+	outputFile << this->a << ' ';
+	outputFile << this->b << ' ';
+	outputFile << '\n';
+
+	logsOutputFile << this->logs.size();
+	logsOutputFile << '\n';
+	for (auto& i : this->logs) {
+		logsOutputFile << i << '\n';
+	}
+	//Save organisms
+	std::string tempName = "";
+	bool isAbilityOnCooldown;
+	int tempNameSize, tempX, tempY, tempBeforeMoveX, tempBeforeMoveY, tempAge, null_value_int = 0, abilityCooldown, humanStrength;
+	char null_value[] = "NULL";
+	char name[256];
+	const char* tempNameInChar;
+	for (size_t i = 0; i < this->a; i++) {
+		for (size_t j = 0; j < this->b; j++) {
+			if (this->board[i][j] == nullptr) {
+				outputFile << null_value_int << ' ';
+				outputFile << null_value << ' ';
+				outputFile << '\n';
+			}
+			else {
+				tempName = this->board[i][j]->getName();
+				tempNameSize = tempName.size();
+
+				tempX = this->board[i][j]->getPosX();
+				tempY = this->board[i][j]->getPosY();
+
+				tempBeforeMoveX = this->board[i][j]->getBeforeMoveX();
+				tempBeforeMoveY = this->board[i][j]->getBeforeMoveY();
+
+				tempAge = this->board[i][j]->getAge();
+
+				outputFile << tempNameSize << ' ';
+				outputFile << tempName << ' ';
+				outputFile << tempX << ' ';
+				outputFile << tempY << ' ';
+				outputFile << tempBeforeMoveX << ' ';
+				outputFile << tempBeforeMoveY << ' ';
+				outputFile << tempAge << ' ';
+				if (tempName == "Human") {
+					isAbilityOnCooldown = dynamic_cast<Human*>(this->board[i][j])->getIsAbilityTurnedOn();
+					abilityCooldown = dynamic_cast<Human*>(this->board[i][j])->getAbilityCooldown();
+					humanStrength = dynamic_cast<Human*>(this->board[i][j])->getStrength();
+
+					outputFile << isAbilityOnCooldown << ' ';
+					outputFile << abilityCooldown << ' ';
+					outputFile << humanStrength << ' ';
+
+				}
+				outputFile << '\n';
+			}
+		}
+	}
+
+	outputFile.close();
+
+	exit(0);
+}
+
+void World::load() {
+	clearscreen();
+	std::string fileName, logsFileName;
+	std::cout << "Your file name: ";
+	std::cin >> fileName;
+	std::cout << std::endl;
+	logsFileName += fileName + "_logs.txt";
+	fileName += ".txt";
+
+	std::ifstream inputFile(fileName, std::ios::in);
+	std::ifstream logsInputFile(logsFileName, std::ios::in);
+
+	int a, b;
+	std::deque<std::string> logs;
+	this->logs = logs;
+	inputFile >> a;
+	inputFile >> b;
+
+	int logsSize;
+	logsInputFile >> logsSize;
+	std::string tempLog;
+
+	for (int i = 0; i < logsSize; i++) {
+		//inputFile >> std::noskipws >> tempLog;
+		std::getline(logsInputFile, tempLog);
+		this->logs.push_back(tempLog);
+		tempLog = "";
+	}
+
+	this->a = a;
+	this->b = b;
+	for (size_t i = 0; i < a; i++) {
+		std::vector<Organism*> temp;
+		for (size_t j = 0; j < b; j++) {
+			temp.push_back(nullptr);
+		}
+		this->board.push_back(temp);
+	}
+
+	bool isAbilityTurnedOn;
+	int posX, posY, beforeMoveX, beforeMoveY, age, nameSize, abilityCooldown, humanStrength;
+	std::string name = "";
+	Organism* newOrganism;
+
+	for (size_t i = 0; i < a; i++) {
+		for (size_t j = 0; j < b; j++) {
+			nameSize = 0;
+			posX = 0;
+			posY = 0;
+			beforeMoveX = 0;
+			beforeMoveY = 0;
+			age = 0;
+			name = "";
+
+			inputFile >> nameSize;
+			inputFile >> name;
+
+			if (name == "NULL") {
+				this->board[i][j] = nullptr;
+				continue;
+			}
+			else {
+				newOrganism = nullptr;
+				if (name == "Antilope") {
+					newOrganism = new Antilope(*this);
+				}
+				else if (name == "Blueberry") {
+					newOrganism = new Blueberry(*this);
+				}
+				else if (name == "Dandelion") {
+					newOrganism = new Dandelion(*this);
+				}
+				else if (name == "Fox") {
+					newOrganism = new Fox(*this);
+				}
+				else if (name == "Grass") {
+					newOrganism = new Grass(*this);
+				}
+				else if (name == "Guarana") {
+					newOrganism = new Guarana(*this);
+				}
+				else if (name == "Hogweed") {
+					newOrganism = new Hogweed(*this);
+				}
+				else if (name == "Human") {
+					newOrganism = new Human(*this);
+				}
+				else if (name == "Sheep") {
+					newOrganism = new Sheep(*this);
+				}
+				else if (name == "Turtle") {
+					newOrganism = new Turtle(*this);
+				}
+				else if (name == "Wolf") {
+					newOrganism = new Wolf(*this);
+				}
+				if (newOrganism != nullptr) {
+					this->board[newOrganism->getPosX()][newOrganism->getPosY()] = nullptr;
+
+					inputFile >> posX;
+					inputFile >> posY;
+
+					inputFile >> beforeMoveX;
+					inputFile >> beforeMoveY;
+
+					inputFile >> age;
+					
+					if (name == "Human") {
+						inputFile >> isAbilityTurnedOn;
+						inputFile >> abilityCooldown;
+						inputFile >> humanStrength;
+
+						dynamic_cast<Human*>(newOrganism)->setAbilityCooldown(abilityCooldown);
+						dynamic_cast<Human*>(newOrganism)->setIsAbilityTurnedOn(isAbilityTurnedOn);
+						dynamic_cast<Human*>(newOrganism)->setStrength(humanStrength);
+						
+						this->human = dynamic_cast<Human*>(newOrganism);
+					}
+
+
+					newOrganism->setAge(age);
+
+					newOrganism->setPosX(posX);
+					newOrganism->setPosY(posY);
+
+					newOrganism->setBeforeMoveX(beforeMoveX);
+					newOrganism->setBeforeMoveY(beforeMoveY);
+
+					this->board[i][j] = newOrganism;
+				}
+
+			}
+		}
+		
+	}
+
+	inputFile.close();
 }
 
 World::~World() {

@@ -6,7 +6,7 @@ public:
 	Animal(World& world);
 	Animal(World& world, bool isHuman);
 
-	virtual Animal* clone() = 0;
+	virtual Animal* clone();
 
 	void virtual act() override;
 	void virtual collision() override;

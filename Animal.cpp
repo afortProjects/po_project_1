@@ -114,7 +114,9 @@ void Animal::breed() {
 	}
 
 }
-
+Animal* Animal::clone() {
+	return nullptr;
+}
 void Animal::collision() {
 	//Check if there is the same species nearby, if yes create new object
 	if (this->name ==this->world.board[this->posX][this->posY]->name) {
